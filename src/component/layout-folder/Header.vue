@@ -179,12 +179,12 @@ export default {
 }
 
 /* Hide overlay on large screens just in case */
-@media (max-width: 992px){
+@media (min-width: 992px){
   .mobile-overlay{ display: none; }
 
   .logoimage{
-  width: 60px;
-}
+    width: 60px;
+  }
 
 }
 
