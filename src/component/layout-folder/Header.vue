@@ -2,7 +2,7 @@
   <div>
     <nav ref="navRef" class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
-        <router-link class="navbar-brand" to="/">Navbar</router-link>
+       <img :src="Logo" alt=""  @click="$router.push('/')" class="logoimage" />
 
         <!-- Mobile cart + toggler -->
         <div class="d-lg-none ms-auto me-2 d-flex align-items-center gap-2">
@@ -59,8 +59,9 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import CartIcon from '@/component/common-folder/CartIcon.vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import CartIcon from '@/component/common-folder/CartIcon.vue';
+import Logo from '../../assets/norah.svg';
 
 export default {
   components: { CartIcon },
@@ -90,7 +91,7 @@ export default {
       window.removeEventListener('resize', onResize)
     })
 
-    return { menuOpen, toggleMenu, closeMenu, navRef, spacerHeight }
+    return { menuOpen, toggleMenu, closeMenu, navRef, spacerHeight, Logo }
   }
 }
 </script>
@@ -146,6 +147,10 @@ export default {
   justify-content: center;
 }
 
+.logoimage{
+  width: 90px;
+}
+
 
 .navbar{
   position: fixed;
@@ -174,8 +179,13 @@ export default {
 }
 
 /* Hide overlay on large screens just in case */
-@media (min-width: 992px){
+@media (max-width: 992px){
   .mobile-overlay{ display: none; }
+
+  .logoimage{
+  width: 60px;
+}
+
 }
 
 </style>
