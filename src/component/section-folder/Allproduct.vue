@@ -5,12 +5,16 @@
 
         <div class="">
            <MenPerfume />
+
+           <WomenPerfume  class="mt-2"/>
         </div>
     </section>
 </template>
 
 <script setup>
 import MenPerfume from './MenPerfume.vue';
+
+import WomenPerfume from './WomenPerfume.vue';
 </script>
 
 <style scoped lang="scss">

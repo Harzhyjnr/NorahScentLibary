@@ -52,6 +52,18 @@ const router = createRouter({
     component: PerfumeSelector,
   }
   ],
+
+  
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition   // when using back/forward button
+    } else {
+      return { top: 0 }      // always scroll to top on new page
+    }
+  }
 })
+
+
+
 
 export default router
