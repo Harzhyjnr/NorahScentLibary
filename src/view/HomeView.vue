@@ -20,7 +20,7 @@
         />
     </div>
 </div>
-
+<Allproduct />
 <FAQs />
 
     </div>
@@ -32,6 +32,8 @@ import HeroSection from '@/component/section-folder/HeroSection.vue';
 import HeroContent from '@/component/common-folder/HeroContent.vue';
 
 import MenWomenShopCard from '@/component/common-folder/MenWomenShopCard.vue';
+
+import Allproduct from '@/component/section-folder/Allproduct.vue';
 
 import FAQs from '@/component/FAQs.vue';
 

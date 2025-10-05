@@ -10,7 +10,7 @@
 
       <!-- Static fallback (shows when Swiper isn't available) -->
       <div v-else class="swiper-bg">
-        <img :src="creatorImages[0]" alt="hero-fallback" class="slide-img" />
+        <img :src="creatorImages[i]" alt="hero-fallback" class="slide-img" />
       </div>
     </div>
   </section>
