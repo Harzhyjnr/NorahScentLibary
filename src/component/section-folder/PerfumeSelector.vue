@@ -1,5 +1,5 @@
 <template>
-  <div class="shop-page d-flex">
+  <div class="shop-page d-flex flex-column flex-lg-row">
     <!-- Sidebar -->
     <transition name="slide">
       <aside
@@ -61,33 +61,43 @@
 
         <!-- Reset Button -->
         <div class="mt-4">
-          <button class="btn btn-outline-dark w-100" @click="resetFilters">Reset Filters</button>
+          <button class="btn btn-outline-dark w-100" @click="resetFilters">
+            Reset Filters
+          </button>
         </div>
       </aside>
     </transition>
 
     <!-- Main Content -->
-    <div class="content flex-grow-1 p-4">
-      <!-- Hamburger + Search bar -->
-      <div class="d-flex align-items-center gap-3 mb-4">
-        <button class="btn p-2 fw-bold d-lg-none" @click="toggleSidebar">
+    <div class="content flex-grow-1 p-3 p-md-4">
+      <!-- Header Bar -->
+      <div
+        class="header-bar d-flex align-items-center justify-content-between gap-2 mb-4 flex-wrap"
+      >
+        <!-- Hamburger -->
+        <button
+          class="btn p-2 fw-bold d-lg-none menu-btn flex-shrink-0"
+          @click="toggleSidebar"
+        >
           <i :class="showSidebar ? 'bi bi-x-lg fs-5' : 'bi bi-list fs-4'"></i>
         </button>
 
         <!-- Search bar -->
-        <div class="search-box d-flex align-items-center border rounded-pill px-3 py-2 flex-grow-1">
+        <div
+          class="search-box d-flex align-items-center border rounded-pill px-3 py-2 flex-grow-1"
+        >
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search perfume..."
             class="form-control border-0 shadow-none flex-grow-1"
           />
-          <i class="bi bi-search fs-5"></i>
+          <i class="bi bi-search fs-5 text-dark"></i>
         </div>
       </div>
 
-      <!-- Dynamic Product Grid -->
-      <div>
+      <!-- Product Grid -->
+      <div class="product-section text-center">
         <MenPerfume
           v-if="selectedCategory === 'Men'"
           :search-query="searchQuery"
@@ -100,7 +110,11 @@
           :selected-brand="selectedBrand"
           :selected-size="selectedSize"
         />
-        <div v-else class="text-center text-muted mt-5">
+        <div
+          v-else
+          class="text-muted mt-5"
+          style="font-size: 1.1rem; font-weight: 500;"
+        >
           Please select a category to view products.
         </div>
       </div>
@@ -126,7 +140,6 @@ const sizes = ["Small (15–49ml)", "Medium (50–99ml)", "Large (100–200ml)"]
 
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
 
-// 🟢 Allow toggling (click again to unselect)
 const toggleSelection = (type, value) => {
   if (type === "category") {
     selectedCategory.value = selectedCategory.value === value ? "" : value;
@@ -137,7 +150,6 @@ const toggleSelection = (type, value) => {
   }
 };
 
-// 🟡 Reset all filters
 const resetFilters = () => {
   selectedCategory.value = "";
   selectedBrand.value = "";
@@ -152,11 +164,12 @@ onMounted(() => {
 
 <style scoped>
 .shop-page {
-  position: relative;
-  min-height: 100vh;
   background: #fff;
+  min-height: 100vh;
   overflow-x: hidden;
 }
+
+/* Sidebar */
 .sidebar {
   width: 260px;
   height: calc(100vh - 70px);
@@ -165,9 +178,17 @@ onMounted(() => {
   left: 0;
   overflow-y: auto;
   z-index: 1050;
-  background: white;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
 }
+@media (min-width: 992px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    box-shadow: none;
+  }
+}
+
+/* Slide Animation */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;
@@ -176,27 +197,60 @@ onMounted(() => {
 .slide-leave-to {
   transform: translateX(-100%);
 }
+
+/* Search Box */
+.search-box {
+  max-width: 100%;
+  min-width: 0;
+}
+.search-box input {
+  font-size: 0.95rem;
+}
 .search-box i {
   color: #000;
+  transition: color 0.2s ease;
 }
 .search-box i:hover {
   color: #555;
 }
-button i {
-  color: #000;
-  font-weight: 700;
-  transition: color 0.2s ease, transform 0.3s ease;
+
+/* Menu Button */
+.menu-btn {
+  background: #fff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-button:hover i {
-  color: #555;
-  transform: scale(1.1);
+
+/* Product Section */
+.product-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-@media (min-width: 992px) {
-  .sidebar {
-    position: static;
-    height: auto;
-    box-shadow: none;
-    top: 0;
+
+/* 📱 Extra Small Screens (like iPhone 4) */
+@media (max-width: 375px) {
+  .header-bar {
+    flex-wrap: nowrap !important;
+  }
+  .menu-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+  }
+  .search-box {
+    flex-grow: 1;
+    padding: 4px 10px;
+  }
+  .search-box input {
+    font-size: 0.8rem;
+  }
+  .search-box i {
+    font-size: 1rem;
   }
 }
 </style>
