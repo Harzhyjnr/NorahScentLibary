@@ -11,59 +11,66 @@
           <i class="bi bi-x-lg fs-5" @click="toggleSidebar"></i>
         </div>
 
+        <!-- Category Filter -->
         <div class="filter-group mb-4">
           <h6 class="fw-semibold">Categories</h6>
           <div v-for="cat in categories" :key="cat" class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
+              type="radio"
+              name="category"
               :id="cat"
-              v-model="selectedCategories"
-              :value="cat"
+              :checked="selectedCategory === cat"
+              @change="toggleSelection('category', cat)"
             />
             <label class="form-check-label" :for="cat">{{ cat }}</label>
           </div>
         </div>
 
+        <!-- Brand Filter -->
         <div class="filter-group mb-4">
           <h6 class="fw-semibold">Brand</h6>
           <div v-for="brand in brands" :key="brand" class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
+              type="radio"
+              name="brand"
               :id="brand"
-              v-model="selectedBrands"
-              :value="brand"
+              :checked="selectedBrand === brand"
+              @change="toggleSelection('brand', brand)"
             />
             <label class="form-check-label" :for="brand">{{ brand }}</label>
           </div>
         </div>
 
+        <!-- Size Filter -->
         <div class="filter-group">
           <h6 class="fw-semibold">Size</h6>
           <div v-for="size in sizes" :key="size" class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
+              type="radio"
+              name="size"
               :id="size"
-              v-model="selectedSizes"
-              :value="size"
+              :checked="selectedSize === size"
+              @change="toggleSelection('size', size)"
             />
             <label class="form-check-label" :for="size">{{ size }}</label>
           </div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="mt-4">
+          <button class="btn btn-outline-dark w-100" @click="resetFilters">Reset Filters</button>
         </div>
       </aside>
     </transition>
 
     <!-- Main Content -->
     <div class="content flex-grow-1 p-4">
-      <!-- Hamburger + Search bar side by side -->
+      <!-- Hamburger + Search bar -->
       <div class="d-flex align-items-center gap-3 mb-4">
-        <!-- Sidebar Toggle Button -->
-        <button
-          class="btn p-2 fw-bold"
-          @click="toggleSidebar"
-        >
+        <button class="btn p-2 fw-bold d-lg-none" @click="toggleSidebar">
           <i :class="showSidebar ? 'bi bi-x-lg fs-5' : 'bi bi-list fs-4'"></i>
         </button>
 
@@ -72,33 +79,71 @@
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search"
+            placeholder="Search perfume..."
             class="form-control border-0 shadow-none flex-grow-1"
           />
           <i class="bi bi-search fs-5"></i>
         </div>
       </div>
 
-      <div class="text-center text-muted">Product grid will go here</div>
+      <!-- Dynamic Product Grid -->
+      <div>
+        <MenPerfume
+          v-if="selectedCategory === 'Men'"
+          :search-query="searchQuery"
+          :selected-brand="selectedBrand"
+          :selected-size="selectedSize"
+        />
+        <WomanPerfume
+          v-else-if="selectedCategory === 'Women'"
+          :search-query="searchQuery"
+          :selected-brand="selectedBrand"
+          :selected-size="selectedSize"
+        />
+        <div v-else class="text-center text-muted mt-5">
+          Please select a category to view products.
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import MenPerfume from "../section-folder/MenPerfume.vue";
+import WomanPerfume from "../section-folder/WomenPerfume.vue";
 
 const showSidebar = ref(false);
 const windowWidth = ref(window.innerWidth);
 const searchQuery = ref("");
-const selectedCategories = ref([]);
-const selectedBrands = ref([]);
-const selectedSizes = ref([]);
+const selectedCategory = ref("");
+const selectedBrand = ref("");
+const selectedSize = ref("");
 
 const categories = ["Men", "Women"];
 const brands = ["Chanel", "Louis Vuitton", "Escada", "Mancera", "Viktor&Rolf"];
 const sizes = ["Small (15–49ml)", "Medium (50–99ml)", "Large (100–200ml)"];
 
 const toggleSidebar = () => (showSidebar.value = !showSidebar.value);
+
+// 🟢 Allow toggling (click again to unselect)
+const toggleSelection = (type, value) => {
+  if (type === "category") {
+    selectedCategory.value = selectedCategory.value === value ? "" : value;
+  } else if (type === "brand") {
+    selectedBrand.value = selectedBrand.value === value ? "" : value;
+  } else if (type === "size") {
+    selectedSize.value = selectedSize.value === value ? "" : value;
+  }
+};
+
+// 🟡 Reset all filters
+const resetFilters = () => {
+  selectedCategory.value = "";
+  selectedBrand.value = "";
+  selectedSize.value = "";
+  searchQuery.value = "";
+};
 
 onMounted(() => {
   window.addEventListener("resize", () => (windowWidth.value = window.innerWidth));
@@ -112,8 +157,6 @@ onMounted(() => {
   background: #fff;
   overflow-x: hidden;
 }
-
-/* Sidebar Styling */
 .sidebar {
   width: 260px;
   height: calc(100vh - 70px);
@@ -125,8 +168,6 @@ onMounted(() => {
   background: white;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
 }
-
-/* Sidebar slide transition */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;
@@ -135,29 +176,21 @@ onMounted(() => {
 .slide-leave-to {
   transform: translateX(-100%);
 }
-
-/* Search box */
 .search-box i {
   color: #000;
 }
-
 .search-box i:hover {
   color: #555;
 }
-
-/* Hamburger button */
 button i {
   color: #000;
   font-weight: 700;
   transition: color 0.2s ease, transform 0.3s ease;
 }
-
 button:hover i {
   color: #555;
   transform: scale(1.1);
 }
-
-/* For large screens */
 @media (min-width: 992px) {
   .sidebar {
     position: static;
