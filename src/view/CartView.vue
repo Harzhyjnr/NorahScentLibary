@@ -22,7 +22,7 @@
       <div class="mt-4 d-flex justify-content-between align-items-center">
         <div class="h5">Total: {{ formatCurrency(total) }}</div>
         <div>
-          <button class="btn btn-outline-secondary me-2" @click="clear">Clear</button>
+          <!-- <button class="btn btn-outline-secondary me-2" @click="clear">Clear</button> -->
           <router-link class="btn btn-dark" :to="{ name: 'checkout' }">Proceed to Checkout</router-link>
         </div>
       </div>
