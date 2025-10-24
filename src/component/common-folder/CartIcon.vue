@@ -21,12 +21,18 @@
 <script setup>
 import { computed } from 'vue'
 const { count, size, to } = defineProps({
-  count: { type: Number, default: 0 },
+  count: { type: [Number, Object], default: 0 },
   size: { type: [Number, String], default: 24 },
   to: { type: [String, Object], default: '/cart' }
 })
 
-const displayCount = computed(() => (count > 99 ? '99+' : count))
+const numericCount = computed(() => {
+  if (typeof count === 'number') return count
+  if (count && typeof count.value === 'number') return count.value
+  return 0
+})
+
+const displayCount = computed(() => (numericCount.value > 99 ? '99+' : numericCount.value))
 </script>
 
 <style scoped lang="scss">

@@ -11,7 +11,8 @@
           :title="product.title"
           :details="product.details"
           :price="product.price"
-          :to="product.to"
+          :id="product.id"
+          :to="product.to || { name: 'singleproduct', params: { id: product.id } }"
         />
       </div>
     </div>
@@ -21,22 +22,12 @@
 <script setup>
 import { computed } from "vue";
 import PerfumeCard from "@/component/common-folder/PerfumeCard.vue";
-import Img1 from "../../assets/mancre.webp";
-import Img2 from "../../assets/victor.webp";
-import Img3 from "../../assets/mancre 2.webp";
-import Img4 from "../../assets/louis.webp";
-
 const props = defineProps(["searchQuery", "selectedBrand", "selectedSize"]);
 
-const products = [
-  { id: 1, title: "Chanel Coco Mademoiselle EDP 100ml", details: "", price: 55000, image: Img1, to: "/shop", brand: "Chanel", size: "Medium (50–99ml)" },
-  { id: 2, title: "Escada Flor del Sol EDP 100ml", details: "", price: 28000, image: Img2, to: "/shop", brand: "Escada", size: "Medium (50–99ml)" },
-  { id: 3, title: "Mancera Roses Vanille EDP 120ml", details: "", price: 32000, image: Img3, to: "/shop", brand: "Mancera", size: "Large (100–200ml)" },
-  { id: 4, title: "Louis Vuitton Le Jour Se Lève EDP 100ml", details: "", price: 95000, image: Img4, to: "/shop", brand: "Louis Vuitton", size: "Medium (50–99ml)" },
-];
+import { womenProducts } from "@/data/products.js";
 
 const filteredProducts = computed(() =>
-  products.filter((p) => {
+  womenProducts.filter((p) => {
     const matchesSearch =
       !props.searchQuery ||
       p.title.toLowerCase().includes(props.searchQuery.toLowerCase());

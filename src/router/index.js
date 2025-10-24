@@ -4,8 +4,8 @@ import ShopView from '@/view/ShopView.vue';
 import MenPerfume from '@/component/section-folder/MenPerfume.vue';
 import WomenPerfume from '@/component/section-folder/WomenPerfume.vue';
 import Allproduct from '@/component/section-folder/Allproduct.vue';
-import PerfumeCard from '@/component/common-folder/PerfumeCard.vue';
 import PerfumeSelector from '@/component/section-folder/PerfumeSelector.vue';
+import SingleProduct from '@/view/SingleProduct.vue';
 
 
 const router = createRouter({
@@ -42,14 +42,27 @@ const router = createRouter({
     component: Allproduct,
   },
   {
-    name:"perfumecard",  
-    path:"/perfumecard",
-    component:  PerfumeCard,
-  },
-  {
     name:"perfumeselector",  
     path:"/perfumeselector",
     component: PerfumeSelector,
+  },
+
+  {
+    name: "cart",
+    path: "/cart",
+    component: () => import('@/view/CartView.vue')
+  },
+  {
+    name: 'checkout',
+    path: '/checkout',
+    component: () => import('@/view/CheckoutView.vue')
+  },
+
+  {
+    name:"singleproduct",
+    path:"/singleproduct/:id",
+    component: SingleProduct,
+    props:true,
   }
   ],
 

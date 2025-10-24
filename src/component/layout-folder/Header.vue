@@ -6,7 +6,7 @@
 
         <!-- Mobile cart + toggler -->
         <div class="d-lg-none ms-auto me-2 d-flex align-items-center gap-2">
-          <CartIcon />
+          <CartIcon :count="currentCount" />
           <button
             class="navbar-toggler custom-toggler"
             type="button"
@@ -34,7 +34,7 @@
 
         <!-- Desktop cart -->
         <div class="d-none d-lg-flex">
-          <CartIcon />
+          <CartIcon :count="currentCount" />
         </div>
       </div>
     </nav>
@@ -62,6 +62,8 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import CartIcon from '@/component/common-folder/CartIcon.vue';
 import Logo from '../../assets/norah.svg';
+import { cartCount } from '@/stores/cart.js';
+import { computed } from 'vue';
 
 export default {
   components: { CartIcon },
@@ -91,7 +93,9 @@ export default {
       window.removeEventListener('resize', onResize)
     })
 
-    return { menuOpen, toggleMenu, closeMenu, navRef, spacerHeight, Logo }
+    const currentCount = computed(() => cartCount.value || 0)
+
+    return { menuOpen, toggleMenu, closeMenu, navRef, spacerHeight, Logo, currentCount }
   }
 }
 </script>

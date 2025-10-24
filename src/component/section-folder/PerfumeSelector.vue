@@ -110,12 +110,20 @@
           :selected-brand="selectedBrand"
           :selected-size="selectedSize"
         />
-        <div
-          v-else
-          class="text-muted mt-5"
-          style="font-size: 1.1rem; font-weight: 500;"
-        >
-          Please select a category to view products.
+        <div v-else class="mt-4 w-100">
+         
+          <div class="row g-3">
+            <div class="col-6 col-md-3" v-for="p in suggestedList" :key="p.id">
+              <PerfumeCard
+                :image="p.image"
+                :title="p.title"
+                :details="p.details"
+                :price="p.price"
+                :id="p.id"
+                :to="{ name: 'singleproduct', params: { id: p.id } }"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -123,9 +131,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import MenPerfume from "../section-folder/MenPerfume.vue";
 import WomanPerfume from "../section-folder/WomenPerfume.vue";
+import PerfumeCard from "@/component/common-folder/PerfumeCard.vue";
+import { allProducts } from "@/data/products.js";
 
 const showSidebar = ref(false);
 const windowWidth = ref(window.innerWidth);
@@ -160,6 +170,18 @@ const resetFilters = () => {
 onMounted(() => {
   window.addEventListener("resize", () => (windowWidth.value = window.innerWidth));
 });
+
+function pickNRandom(arr, n = 8) {
+  if (!arr || !arr.length) return [];
+  const pool = [...arr];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, Math.min(n, pool.length));
+}
+
+const suggestedList = computed(() => pickNRandom(allProducts, 8));
 </script>
 
 <style scoped>
